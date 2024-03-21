@@ -74,6 +74,21 @@ class PropertyControllerTest {
     }
 
     @Test
+    @DisplayName("Succes scenario for fetching a property by id")
+    void testGetPropertyById() {
+        // Given
+        propertyDTOResponse.setId(1L);
+        Long propertyId = 1L;
+        // When
+        Mockito.when(propertyService.getPropertyById(propertyId)).thenReturn(propertyDTOResponse);
+        ResponseEntity<PropertyDTO> responseEntity = propertyController.getPropertyById(propertyId);
+
+        // Then
+        Assertions.assertEquals(propertyId, propertyDTOResponse.getId());
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
+    }
+
+    @Test
     @DisplayName("Success scenario for updating property")
     void testUpdateProperty() {
         // Given
@@ -140,12 +155,16 @@ class PropertyControllerTest {
     @Test
     @DisplayName("Success scenario for deleting property")
     void testDeleteProperty() {
+        // Given
+        Long propertyId = 1L;
+
         // When
         Mockito.doNothing().when(propertyService).deleteProperty(1L);
+        Mockito.when(propertyService.getPropertyById(propertyId)).thenReturn(propertyDTOResponse);
         ResponseEntity<Void> responseEntity = propertyController.deleteProperty(1L);
 
         // Then
         Assertions.assertNull(responseEntity.getBody());
-        Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), responseEntity.getStatusCode().value());
+        Assertions.assertEquals(HttpStatus.OK.value(), responseEntity.getStatusCode().value());
     }
 }

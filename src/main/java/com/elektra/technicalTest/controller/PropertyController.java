@@ -28,6 +28,13 @@ public class PropertyController {
         return new ResponseEntity<>(propertyDTOsResponse, HttpStatus.OK);
     }
 
+    @GetMapping("{propertyId}")
+    public ResponseEntity<PropertyDTO> getPropertyById(@PathVariable Long propertyId) {
+        PropertyDTO propertyDTOResponse = propertyService.getPropertyById(propertyId);
+        if(propertyDTOResponse == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(propertyDTOResponse, HttpStatus.OK);
+    }
+
     @PutMapping("{propertyId}")
     public ResponseEntity<PropertyDTO> updateProperty(@RequestBody PropertyDTO propertyDTORequest,
                                                       @PathVariable Long propertyId) {
@@ -51,8 +58,10 @@ public class PropertyController {
 
     @DeleteMapping("{propertyId}")
     public ResponseEntity<Void> deleteProperty(@PathVariable Long propertyId) {
+        PropertyDTO propertyDTOResponse = propertyService.getPropertyById(propertyId);
+        if(propertyDTOResponse == null) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         propertyService.deleteProperty(propertyId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

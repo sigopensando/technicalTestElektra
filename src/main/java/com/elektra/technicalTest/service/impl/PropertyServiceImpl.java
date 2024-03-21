@@ -34,11 +34,23 @@ public class PropertyServiceImpl implements PropertyService {
     }
 
     @Override
+    public PropertyDTO getPropertyById(Long propertyId) {
+        Optional<PropertyEntity> optionalPropertyEntitySaved = propertyRepository.findById(propertyId);
+        PropertyEntity propertyEntityFounded = new PropertyEntity();
+        if (optionalPropertyEntitySaved.isPresent()) {
+            propertyEntityFounded = optionalPropertyEntitySaved.get();
+            return propertyConverter.convertEntityToDTO(propertyEntityFounded);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public List<PropertyDTO> getAllProperties() {
 //        List<PropertyEntity> allPropertyEntities = (List<PropertyEntity>) propertyRepository.findAll();
         List<PropertyEntity> allPropertyEntities = (List<PropertyEntity>) propertyRepositoryJDBC.findAll();
         List<PropertyDTO> allPropertyDTOs = new ArrayList<>();
-        for(PropertyEntity propertyEntity : allPropertyEntities) {
+        for (PropertyEntity propertyEntity : allPropertyEntities) {
             allPropertyDTOs.add(propertyConverter.convertEntityToDTO(propertyEntity));
         }
         return allPropertyDTOs;
@@ -49,7 +61,7 @@ public class PropertyServiceImpl implements PropertyService {
         Optional<PropertyEntity> optionalPropertyEntity = propertyRepository.findById(propertyId);
 //        Optional<PropertyEntity> optionalPropertyEntity = propertyRepositoryJDBC.findById(propertyId);
         PropertyDTO propertyDTOUpdated = null;
-        if(optionalPropertyEntity.isPresent()) {
+        if (optionalPropertyEntity.isPresent()) {
             PropertyEntity propertyEntity = optionalPropertyEntity.get();
             propertyEntity.setTitle(propertyDTO.getTitle());
             propertyEntity.setDescription(propertyDTO.getDescription());
@@ -71,7 +83,7 @@ public class PropertyServiceImpl implements PropertyService {
         Optional<PropertyEntity> optionalPropertyEntity = propertyRepository.findById(propertyId);
 //        Optional<PropertyEntity> optionalPropertyEntity = propertyRepositoryJDBC.findById(propertyId);
         PropertyDTO propertyDTOUpdated = null;
-        if(optionalPropertyEntity.isPresent()) {
+        if (optionalPropertyEntity.isPresent()) {
             PropertyEntity propertyEntity = optionalPropertyEntity.get();
             propertyEntity.setDescription(propertyDTO.getDescription());
 
@@ -88,7 +100,7 @@ public class PropertyServiceImpl implements PropertyService {
         Optional<PropertyEntity> optionalPropertyEntity = propertyRepository.findById(propertyId);
 //        Optional<PropertyEntity> optionalPropertyEntity = propertyRepositoryJDBC.findById(propertyId);
         PropertyDTO propertyDTOUpdated = null;
-        if(optionalPropertyEntity.isPresent()) {
+        if (optionalPropertyEntity.isPresent()) {
             PropertyEntity propertyEntity = optionalPropertyEntity.get();
             propertyEntity.setPrice(propertyDTO.getPrice());
 
